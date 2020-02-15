@@ -83,7 +83,6 @@ def index():
                                    dob=datetime.datetime.strptime(dob, '%m/%d/%Y'))
         db.session.add(new_appl_obj)
         db.session.commit()
-        # Can use S3 object storage for storing application file
     return render_template('loanapp.html')
 
 

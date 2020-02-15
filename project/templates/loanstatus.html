@@ -23,12 +23,14 @@
       {{warning}}
     </div>
     {% endif %}
+
       <ul class="nav">
-         {% if is_applicant %}
          <li class="nav-link">
-            <a href="{{ url_for('users.applicant_attachments') }}">Attachments</a>
+            <a href="{{ url_for('core.index') }}">Loan Request Page</a>
          </li>
-         {% endif %}
+         <li class="nav-link">
+            <a href="{{ url_for('core.loan_status') }}">Loan Status Page</a>
+         </li>
       </ul>
 
       <div class="jumbotron">
