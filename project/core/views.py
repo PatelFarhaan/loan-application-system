@@ -1,3 +1,4 @@
+import random
 import datetime
 from project import db
 from project.models import Application
@@ -5,6 +6,28 @@ from flask import render_template, Blueprint, request
 
 
 core_blueprint = Blueprint('core', __name__, template_folder='templates')
+
+
+def object_to_json(db_object):
+    res = []
+    status_list = ['Approved', 'Rejected']
+    for i in db_object:
+        temp = {}
+        i = i.__dict__
+        temp['dob'] = i['dob']
+        temp['email'] = i['email']
+        temp['amount'] = i['amount']
+        temp['gender'] = i['gender']
+        temp['purpose'] = i['purpose']
+        temp['address'] = i['address']
+        temp['telephone'] = i['telephone']
+        temp['last_name'] = i['last_name']
+        temp['first_name'] = i['first_name']
+        temp['middle_name'] = i['middle_name']
+        temp['status'] = status_list[random.randint(0,1)]
+        res.append(temp)
+    return res
+
 
 @core_blueprint.route('/loanapp', methods=['GET', 'POST'])
 def index():
@@ -60,6 +83,13 @@ def index():
                                    dob=datetime.datetime.strptime(dob, '%m/%d/%Y'))
         db.session.add(new_appl_obj)
         db.session.commit()
-
         # Can use S3 object storage for storing application file
     return render_template('loanapp.html')
+
+
+@core_blueprint.route('/status', methods=['GET'])
+def loan_status():
+    appl_obj = Application.query.all()
+    json_obj = object_to_json(appl_obj)
+    return render_template('loanstatus.html',
+                           application_obj=json_obj)
